@@ -1,0 +1,14 @@
+{
+	"name": "hub_inventory_unlocked",
+	"version": "0.1.0",
+	"factorio_version": "2.0",
+	"title": "Hub Inventory Unlocked",
+	"author": "Sopel",
+	"contact": "",
+	"homepage": "",
+	"description": "Go around the 65535 inventory limit for space platform hubs and cargo landing pads in the least painful way.",
+	"dependencies": [
+    	"base >= 2.0.0",
+    	"? space-age >= 2.0.0"
+	]
+}
