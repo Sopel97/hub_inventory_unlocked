@@ -195,11 +195,18 @@ do
         end
     end
 
+    local function update_bag_capacity(hub_inventory, num_slots, bag)
+        local num_inventory_slots = hub_inventory.get_bar() - 1
+        bag.num_slots = num_slots - num_inventory_slots
+    end
+
     local function update_hub_contents(hub, bag, item_thresholds)
         local entity = hub.entity
         local num_slots = hub.num_slots
 
         local inventory = hub.entity.get_inventory(defines.inventory.cargo_landing_pad_main) -- == .hub_main
+
+        update_bag_capacity(inventory, num_slots, bag)
 
         local counts_by_key = {}
 
@@ -231,7 +238,7 @@ do
 
         -- Bag to inventory
         if bag.num_used_slots > 0 then
-            local num_empty_stacks = inventory.count_empty_stacks()
+            local num_empty_stacks = inventory.count_empty_stacks(false, false)
 
             for key, bag_item_stack in pairs(bag.contents) do
                 local threshold = item_thresholds[key]
