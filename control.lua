@@ -211,26 +211,24 @@ do
         local counts_by_key = {}
 
         -- Inventory to bag
-        if bag.num_used_slots < bag.num_slots then
-            local inventory_contents = inventory.get_contents()
-            for _, item in ipairs(inventory_contents) do
-                local key = item.name .. "$" .. item.quality
-                counts_by_key[key] = item.count
-                local threshold = item_thresholds[key]
-                if threshold ~= nil then
-                    local item_prototype = prototypes.item[item.name]
-                    local stack_size = item_prototype.stack_size
-                    local num_full_stacks_in_inventory = math.floor(item.count / stack_size)
-                    local max_full_stacks_in_inventory = math.max(1, math.ceil(threshold / stack_size))
+        local inventory_contents = inventory.get_contents()
+        for _, item in ipairs(inventory_contents) do
+            local key = item.name .. "$" .. item.quality
+            counts_by_key[key] = item.count
+            local threshold = item_thresholds[key]
+            if threshold ~= nil then
+                local item_prototype = prototypes.item[item.name]
+                local stack_size = item_prototype.stack_size
+                local num_full_stacks_in_inventory = math.floor(item.count / stack_size)
+                local max_full_stacks_in_inventory = math.max(1, math.ceil(threshold / stack_size))
 
-                    if num_full_stacks_in_inventory > max_full_stacks_in_inventory then
-                        local ideal_num_stacks_to_transfer_to_bag = num_full_stacks_in_inventory - max_full_stacks_in_inventory
-                        local num_empty_bag_slots = bag.num_slots - bag.num_used_slots
+                if num_full_stacks_in_inventory > max_full_stacks_in_inventory then
+                    local ideal_num_stacks_to_transfer_to_bag = num_full_stacks_in_inventory - max_full_stacks_in_inventory
+                    local num_empty_bag_slots = bag.num_slots - bag.num_used_slots
 
-                        local actual_num_stacks_to_transfer_to_bag = math.min(num_empty_bag_slots, ideal_num_stacks_to_transfer_to_bag)
-                        if actual_num_stacks_to_transfer_to_bag > 0 then
-                            try_transfer_items_to_bag(inventory, bag, item, item_prototype, actual_num_stacks_to_transfer_to_bag)
-                        end
+                    local actual_num_stacks_to_transfer_to_bag = math.min(num_empty_bag_slots, ideal_num_stacks_to_transfer_to_bag)
+                    if actual_num_stacks_to_transfer_to_bag > 0 then
+                        try_transfer_items_to_bag(inventory, bag, item, item_prototype, actual_num_stacks_to_transfer_to_bag)
                     end
                 end
             end
